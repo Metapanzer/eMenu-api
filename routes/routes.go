@@ -2,6 +2,8 @@ package routes
 
 import (
 	"eMenu-api/controllers"
+	"net/http"
+
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 
@@ -13,18 +15,29 @@ func SetupRouter(db *gorm.DB) *gin.Engine {
 	route := gin.Default()
 
 	// set db to gin context
-	route.Use(func(c *gin.Context) {
-		c.Set("db", db)
+	route.Use(func(ctx *gin.Context) {
+		ctx.Set("db", db)
 	})
-	route.POST("/register", controllers.CreateUser)
 
-	// route.GET("/items", controllers.GetAllMovie)
-	// route.POST("/items", controllers.CreateMovie)
-	// route.GET("/items/:id", controllers.GetMovieById)
-	// route.PATCH("/items/:id", controllers.UpdateMovie)
-	// route.DELETE("items/:id", controllers.DeleteMovie)
+	route.GET("/", Welcome)
+
+	v1 := route.Group("/api/v1")
+	{
+		v1.POST("/register", controllers.Register)
+		v1.POST("/login", controllers.Login)
+
+		// route.GET("/items", controllers.GetAllMovie)
+		// route.POST("/items", controllers.CreateMovie)
+		// route.GET("/items/:id", controllers.GetMovieById)
+		// route.PATCH("/items/:id", controllers.UpdateMovie)
+		// route.DELETE("items/:id", controllers.DeleteMovie)
+	}
 
 	route.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	return route
+}
+
+func Welcome(ctx *gin.Context) {
+	ctx.Redirect(http.StatusFound, "/swagger/index.html")
 }

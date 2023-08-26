@@ -1,4 +1,50 @@
+definitions:
+  controllers.RegisterInput:
+    properties:
+      email:
+        type: string
+      name:
+        maxLength: 45
+        minLength: 3
+        type: string
+      password:
+        type: string
+    required:
+    - email
+    - name
+    - password
+    type: object
 info:
-  contact: {}
-paths: {}
+  contact:
+    email: support@swagger.io
+    name: API Support
+    url: http://www.swagger.io/support
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+paths:
+  /register:
+    post:
+      consumes:
+      - application/json
+      description: Register a new user with the provided information
+      parameters:
+      - description: the body to register a user
+        in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/controllers.RegisterInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Register a new user
+      tags:
+      - Auth
 swagger: "2.0"
