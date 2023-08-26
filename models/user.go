@@ -11,11 +11,11 @@ type User struct {
 	ID          uuid.UUID      `gorm:"type:char(36);primaryKey"`
 	Email       string         `json:"email" gorm:"not null;unique" binding:"required,email"`
 	Password    string         `json:"password" gorm:"not null" binding:"required"`
-	Name        string         `json:"name" gorm:"not null" binding:"required,alpha,min=3,max=45"`
-	Role        uint           `json:"role" gorm:"default:2"`
+	Name        string         `json:"name" gorm:"not null" binding:"required,min=3,max=45"`
+	Role        string         `json:"role" gorm:"default:user"`
 	Reset_token string         `json:"reset_token"`
-	Orders      []Order        `gorm:"foreignkey:UserID"`
-	Reviews     []Review       `gorm:"foreignkey:UserID"`
+	Orders      []Order        `json:"-" gorm:"foreignkey:UserID"`
+	Reviews     []Review       `json:"-" gorm:"foreignkey:UserID"`
 	CreatedAt   time.Time      `json:"created_at"`
 	UpdatedAt   time.Time      `json:"updated_at"`
 	DeletedAt   gorm.DeletedAt `gorm:"index"`
@@ -29,7 +29,7 @@ func (u *User) BeforeCreate(tx *gorm.DB) error {
 type RegisterInput struct {
 	Email    string `json:"email" binding:"required,email"`
 	Password string `json:"password" binding:"required"`
-	Name     string `json:"name" binding:"required,alpha,min=3,max=45"`
+	Name     string `json:"name" binding:"required,min=3,max=45"`
 }
 
 type LoginInput struct {

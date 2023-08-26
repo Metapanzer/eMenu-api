@@ -1,5 +1,41 @@
 definitions:
-  controllers.RegisterInput:
+  gorm.DeletedAt:
+    properties:
+      time:
+        type: string
+      valid:
+        description: Valid is true if Time is not NULL
+        type: boolean
+    type: object
+  models.Category:
+    properties:
+      createdAt:
+        type: string
+      deletedAt:
+        $ref: '#/definitions/gorm.DeletedAt'
+      id:
+        type: integer
+      name:
+        type: string
+      updatedAt:
+        type: string
+    type: object
+  models.CategoryInput:
+    properties:
+      name:
+        type: string
+    type: object
+  models.LoginInput:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    required:
+    - email
+    - password
+    type: object
+  models.RegisterInput:
     properties:
       email:
         type: string
@@ -24,6 +60,119 @@ info:
     url: http://www.apache.org/licenses/LICENSE-2.0.html
   termsOfService: http://swagger.io/terms/
 paths:
+  /category:
+    get:
+      consumes:
+      - application/json
+      description: Get a list of Category.
+      parameters:
+      - description: category search by name
+        in: query
+        name: name
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Category'
+            type: array
+      summary: Get all Item Category.
+      tags:
+      - Category
+    post:
+      consumes:
+      - application/json
+      description: Add a new category, This endpoint requires an admin role. The role
+        is checked based on the user's token.
+      parameters:
+      - description: the body to add a category
+        in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/models.CategoryInput'
+      - description: 'Authorization. How to input in swagger : ''Bearer <insert_your_token_here>'''
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Category'
+            type: array
+      security:
+      - BearerToken: []
+      summary: Insert Item Category.
+      tags:
+      - Category
+  /category/{id}:
+    put:
+      consumes:
+      - application/json
+      description: Update existing category, This endpoint requires an admin role.
+        The role is checked based on the user's token.
+      parameters:
+      - description: the body to add a category
+        in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/models.CategoryInput'
+      - description: Category ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: 'Authorization. How to input in swagger : ''Bearer <insert_your_token_here>'''
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Category'
+            type: array
+      security:
+      - BearerToken: []
+      summary: Update Item Category.
+      tags:
+      - Category
+  /login:
+    post:
+      consumes:
+      - application/json
+      description: Logging in to get jwt token to access admin or user api by roles.
+      parameters:
+      - description: the body to login a user
+        in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/models.LoginInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+      summary: User login
+      tags:
+      - Auth
   /register:
     post:
       consumes:
@@ -35,7 +184,7 @@ paths:
         name: Body
         required: true
         schema:
-          $ref: '#/definitions/controllers.RegisterInput'
+          $ref: '#/definitions/models.RegisterInput'
       produces:
       - application/json
       responses:

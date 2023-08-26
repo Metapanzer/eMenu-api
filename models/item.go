@@ -11,6 +11,6 @@ type Item struct {
 	Price         uint   `json:"price"`
 	Image_url     string `json:"image_url"`
 	CategoryID    uint
-	Reviews       []Review       `gorm:"foreignkey:ItemID"`
-	Order_details []Order_detail `gorm:"foreignkey:ItemID"`
+	Reviews       []Review       `json:"-" gorm:"foreignkey:ItemID"`
+	Order_details []Order_detail `json:"-" gorm:"foreignkey:ItemID"`
 }

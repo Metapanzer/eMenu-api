@@ -16,7 +16,7 @@ import (
 // @Tags Auth
 // @Accept json
 // @Produce json
-// @Param Body body RegisterInput true "the body to register a user"
+// @Param Body body models.RegisterInput true "the body to register a user"
 // @Success 200 {object} map[string]interface{}
 // @Router /register [post]
 func Register(ctx *gin.Context) {
@@ -60,7 +60,7 @@ func Register(ctx *gin.Context) {
 // @Tags Auth
 // @Accept json
 // @Produce json
-// @Param Body body LoginInput true "the body to login a user"
+// @Param Body body models.LoginInput true "the body to login a user"
 // @Success 200 {object} map[string]interface{}
 // @Router /login [post]
 func Login(ctx *gin.Context) {
@@ -73,10 +73,6 @@ func Login(ctx *gin.Context) {
 
 	var user models.User
 	db := ctx.MustGet("db").(*gorm.DB)
-	// if err := db.Where("email = ?", input.Email).Take(&user).Error; err != nil {
-	// 	ctx.JSON(http.StatusNotFound, gin.H{"error": err.Error(), "message": "Account not found"})
-	// 	return
-	// }
 
 	if result := db.First(&user, "email = ?", strings.ToLower(input.Email)); result.Error != nil {
 		ctx.JSON(http.StatusNotFound, gin.H{"status": "error", "message": "Account not found"})
@@ -89,7 +85,7 @@ func Login(ctx *gin.Context) {
 
 	}
 
-	token, err := utils.GenerateToken(user.ID)
+	token, err := utils.GenerateToken(user.ID, user.Role)
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"status": "error", "message": err.Error()})
 		return

@@ -14,7 +14,7 @@ import (
 var TOKEN_SECRET = os.Getenv("TOKEN_SECRET")
 
 // Function to generate JWT Token
-func GenerateToken(user_id interface{}) (string, error) {
+func GenerateToken(user_id interface{}, role string) (string, error) {
 	token_expired_in, err := strconv.Atoi(os.Getenv("TOKEN_EXPIRED_IN"))
 
 	if err != nil {
@@ -24,6 +24,7 @@ func GenerateToken(user_id interface{}) (string, error) {
 	claims := jwt.MapClaims{}
 	claims["authorized"] = true
 	claims["user_id"] = user_id
+	claims["role"] = role
 	claims["exp"] = time.Now().Add(time.Minute * time.Duration(token_expired_in)).Unix()
 	claims["iat"] = time.Now().Unix()
 	claims["nbf"] = time.Now().Unix()
@@ -34,7 +35,7 @@ func GenerateToken(user_id interface{}) (string, error) {
 }
 
 // Function to validate JWT Token and extract user_id
-func ValidateToken(ctx *gin.Context) (interface{}, error) {
+func ValidateToken(ctx *gin.Context) (jwt.MapClaims, error) {
 	tokenString := ExtractToken(ctx)
 	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
@@ -50,7 +51,7 @@ func ValidateToken(ctx *gin.Context) (interface{}, error) {
 		return nil, fmt.Errorf("invalid token claim")
 	}
 
-	return claims["user_id"], nil
+	return claims, nil
 }
 
 // Function to separate Bearer and token string

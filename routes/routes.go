@@ -2,6 +2,7 @@ package routes
 
 import (
 	"eMenu-api/controllers"
+	"eMenu-api/middleware"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -25,6 +26,13 @@ func SetupRouter(db *gorm.DB) *gin.Engine {
 	{
 		v1.POST("/register", controllers.Register)
 		v1.POST("/login", controllers.Login)
+
+		v1.GET("/category", controllers.GetAllCategory)
+
+		admin := v1.Use(middleware.AdminOnly())
+		admin.POST("/category", controllers.InsertCategory)
+		admin.PUT("/category/:id", controllers.UpdateCategory)
+		// admin.DELETE("/category/:id", controllers.DeleteCategory)
 
 		// route.GET("/items", controllers.GetAllMovie)
 		// route.POST("/items", controllers.CreateMovie)

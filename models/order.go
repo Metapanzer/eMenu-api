@@ -10,5 +10,5 @@ type Order struct {
 	Order_status  string         `json:"order_status"`
 	Total_amount  int            `json:"total_amount"`
 	UserID        uuid.UUID      `gorm:"type:char(36)"`
-	Order_details []Order_detail `gorm:"foreignkey:OrderID"`
+	Order_details []Order_detail `json:"-" gorm:"foreignkey:OrderID"`
 }

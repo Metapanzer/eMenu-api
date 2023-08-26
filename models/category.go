@@ -7,5 +7,9 @@ import (
 type Category struct {
 	gorm.Model
 	Name  string `json:"name"`
-	Items []Item `gorm:"foreignkey:CategoryID"`
+	Items []Item `json:"-" gorm:"foreignkey:CategoryID" `
+}
+
+type CategoryInput struct {
+	Name string `json:"name"`
 }
