@@ -20,7 +20,7 @@ func SetupRouter(db *gorm.DB) *gin.Engine {
 		ctx.Set("db", db)
 	})
 
-	route.GET("/", Welcome)
+	route.GET("/", Redirect)
 
 	v1 := route.Group("/api/v1")
 	{
@@ -39,9 +39,10 @@ func SetupRouter(db *gorm.DB) *gin.Engine {
 		user.PATCH("/order/:id", controllers.UpdateOrder)
 		user.DELETE("/order/:id", controllers.DeleteOrder)
 
-		// user.POST("/order-details", controllers.AddOrderItem)
-		// user.PATCH("/order-details/:id", controllers.UpdateOrderItem)
-		// user.DELETE("/order-details/:id", controllers.DeleteOrderItem)
+		user.GET("/order/:id/order-detail", controllers.GetOrderDetailByOrder)
+		user.POST("/order-detail", controllers.InsertOrderDetail)
+		user.PATCH("/order-detail/:id", controllers.UpdateOrderDetail)
+		user.DELETE("/order-detail/:id", controllers.DeleteOrderDetail)
 
 		user.POST("/review", controllers.InsertReview)
 		user.PATCH("/review/:id", controllers.UpdateReview)
@@ -62,6 +63,6 @@ func SetupRouter(db *gorm.DB) *gin.Engine {
 	return route
 }
 
-func Welcome(ctx *gin.Context) {
+func Redirect(ctx *gin.Context) {
 	ctx.Redirect(http.StatusFound, "/swagger/index.html")
 }

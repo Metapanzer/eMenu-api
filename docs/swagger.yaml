@@ -92,6 +92,37 @@ definitions:
       userID:
         type: string
     type: object
+  models.Order_detail:
+    properties:
+      createdAt:
+        type: string
+      deletedAt:
+        $ref: '#/definitions/gorm.DeletedAt'
+      id:
+        type: integer
+      item_id:
+        type: integer
+      order_id:
+        type: integer
+      quantity:
+        type: integer
+      updatedAt:
+        type: string
+    type: object
+  models.Order_detailInput:
+    properties:
+      item_id:
+        type: integer
+      order_id:
+        type: integer
+      quantity:
+        type: integer
+    type: object
+  models.Order_detailUpdateInput:
+    properties:
+      quantity:
+        type: integer
+    type: object
   models.OrderInput:
     properties:
       userID:
@@ -533,6 +564,105 @@ paths:
       summary: Insert new order.
       tags:
       - Order
+  /order-detail:
+    post:
+      consumes:
+      - application/json
+      description: Add new order detail, This endpoint requires user role. The role
+        is checked based on the user's token.
+      parameters:
+      - description: the body to add an order detail
+        in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/models.Order_detailInput'
+      - description: 'Authorization. How to input in swagger : ''Bearer <insert_your_token_here>'''
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Order_detail'
+            type: array
+      security:
+      - BearerToken: []
+      summary: Insert new order detail.
+      tags:
+      - Order_detail
+  /order-detail/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete one order detail, This endpoint requires user role. The
+        role is checked based on the user's token.
+      parameters:
+      - description: Order_detail ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: 'Authorization. How to input in swagger : ''Bearer <insert_your_token_here>'''
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Order_detail'
+            type: array
+      security:
+      - BearerToken: []
+      summary: Delete user order detail.
+      tags:
+      - Order_detail
+    patch:
+      consumes:
+      - application/json
+      description: Update existing order detail, This endpoint requires user role.
+        The role is checked based on the user's token.
+      parameters:
+      - description: the body to update order detail
+        in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/models.Order_detailUpdateInput'
+      - description: Order_detail ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: 'Authorization. How to input in swagger : ''Bearer <insert_your_token_here>'''
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Order_detail'
+            type: array
+      security:
+      - BearerToken: []
+      summary: Update user order detail.
+      tags:
+      - Order_detail
   /order/{id}:
     delete:
       consumes:
@@ -600,6 +730,37 @@ paths:
       summary: Update user order.
       tags:
       - Order
+  /order/{id}/order-detail:
+    get:
+      consumes:
+      - application/json
+      description: Get all order detail by order ID, This endpoint requires user role.
+        The role is checked based on the user's token.
+      parameters:
+      - description: Order ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: 'Authorization. How to input in swagger : ''Bearer <insert_your_token_here>'''
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Order_detail'
+            type: array
+      security:
+      - BearerToken: []
+      summary: Get all order detail on specific order.
+      tags:
+      - Order_detail
   /register:
     post:
       consumes:
