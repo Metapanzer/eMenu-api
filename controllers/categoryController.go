@@ -48,7 +48,7 @@ func InsertCategory(ctx *gin.Context) {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 	}
 
-	var isExist models.User
+	var isExist models.Category
 	if err := db.Where("name =?", newCategory.Name).First(&isExist).Error; err == nil {
 		ctx.JSON(http.StatusConflict, gin.H{"status": "error", "message": "Category already exist"})
 		return
@@ -111,11 +111,11 @@ func UpdateCategory(ctx *gin.Context) {
 // @Router /category/{id} [delete]
 func DeleteCategory(ctx *gin.Context) {
 	db := ctx.MustGet("db").(*gorm.DB)
-	var catagory models.Category
-	if err := db.Where(`id = ?`, ctx.Param("id")).First(&catagory).Error; err != nil {
+	var category models.Category
+	if err := db.Where(`id = ?`, ctx.Param("id")).First(&category).Error; err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"status": "error", "error": "Record not found!"})
 		return
 	}
-	db.Delete(&catagory)
+	db.Delete(&category)
 	ctx.JSON(http.StatusOK, gin.H{"status": " success", "message": "Category deleted successfully"})
 }

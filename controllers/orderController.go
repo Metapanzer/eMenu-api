@@ -15,7 +15,7 @@ import (
 // @Tags Order
 // @Accept       json
 // @Produce      json
-// @Param        Body    body     models.Order  true  "the body to add an order"
+// @Param        Body    body     models.OrderInput  true  "the body to add an order"
 // @Param Authorization header string true "Authorization. How to input in swagger : 'Bearer <insert_your_token_here>'"
 // @Security BearerToken
 // @Success 200 {object} []models.Order

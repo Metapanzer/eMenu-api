@@ -531,7 +531,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.Order"
+                            "$ref": "#/definitions/models.OrderInput"
                         }
                     },
                     {
@@ -978,6 +978,14 @@
                 "updatedAt": {
                     "type": "string"
                 },
+                "userID": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.OrderInput": {
+            "type": "object",
+            "properties": {
                 "userID": {
                     "type": "string"
                 }

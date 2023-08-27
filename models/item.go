@@ -10,7 +10,7 @@ type Item struct {
 	Description   string         `json:"description"`
 	Price         uint           `json:"price"`
 	Image_url     string         `json:"image_url"`
-	CategoryID    uint           `json:"category_id"`
+	CategoryID    uint           `json:"category_id" gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
 	Reviews       []Review       `json:"-" gorm:"foreignkey:ItemID"`
 	Order_details []Order_detail `json:"-" gorm:"foreignkey:ItemID"`
 }

@@ -92,6 +92,11 @@ definitions:
       userID:
         type: string
     type: object
+  models.OrderInput:
+    properties:
+      userID:
+        type: string
+    type: object
   models.OrderUpdateInput:
     properties:
       order_status:
@@ -508,7 +513,7 @@ paths:
         name: Body
         required: true
         schema:
-          $ref: '#/definitions/models.Order'
+          $ref: '#/definitions/models.OrderInput'
       - description: 'Authorization. How to input in swagger : ''Bearer <insert_your_token_here>'''
         in: header
         name: Authorization

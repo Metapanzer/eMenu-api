@@ -543,7 +543,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.Order"
+                            "$ref": "#/definitions/models.OrderInput"
                         }
                     },
                     {
@@ -990,6 +990,14 @@ const docTemplate = `{
                 "updatedAt": {
                     "type": "string"
                 },
+                "userID": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.OrderInput": {
+            "type": "object",
+            "properties": {
                 "userID": {
                     "type": "string"
                 }
