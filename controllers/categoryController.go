@@ -50,7 +50,7 @@ func InsertCategory(ctx *gin.Context) {
 
 	var isExist models.User
 	if err := db.Where("name =?", newCategory.Name).First(&isExist).Error; err == nil {
-		ctx.JSON(http.StatusConflict, gin.H{"status": "error", "message": "Menu already exist"})
+		ctx.JSON(http.StatusConflict, gin.H{"status": "error", "message": "Category already exist"})
 		return
 	}
 
@@ -69,7 +69,7 @@ func InsertCategory(ctx *gin.Context) {
 // @Tags Category
 // @Accept       json
 // @Produce      json
-// @Param        Body    body     models.CategoryInput  true  "the body to add a category"
+// @Param        Body    body     models.CategoryInput  true  "the body to update category"
 // @Param        id    path     int  true  "Category ID"
 // @Param Authorization header string true "Authorization. How to input in swagger : 'Bearer <insert_your_token_here>'"
 // @Security BearerToken
