@@ -722,4 +722,35 @@ paths:
       summary: Update user review.
       tags:
       - Review
+  /user/{id}/order:
+    get:
+      consumes:
+      - application/json
+      description: Get all order by user ID, This endpoint requires user role. The
+        role is checked based on the user's token.
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: 'Authorization. How to input in swagger : ''Bearer <insert_your_token_here>'''
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Order'
+            type: array
+      security:
+      - BearerToken: []
+      summary: Get all order on specific user.
+      tags:
+      - Order
 swagger: "2.0"

@@ -98,3 +98,26 @@ func DeleteOrder(ctx *gin.Context) {
 	db.Delete(&order)
 	ctx.JSON(http.StatusOK, gin.H{"status": " success", "message": "Order deleted successfully"})
 }
+
+// GetOrderByUser godoc
+// @Summary Get all order on specific user.
+// @Description Get all order by user ID, This endpoint requires user role. The role is checked based on the user's token.
+// @Tags Order
+// @Accept       json
+// @Produce      json
+// @Param        id    path     string  true  "User ID"
+// @Param Authorization header string true "Authorization. How to input in swagger : 'Bearer <insert_your_token_here>'"
+// @Security BearerToken
+// @Success 200 {object} []models.Order
+// @Router /user/{id}/order [get]
+func GetOrderByUser(ctx *gin.Context) {
+	db := ctx.MustGet("db").(*gorm.DB)
+	var order []models.Order
+
+	if err := db.Where(`user_id = ?`, ctx.Param("id")).Find(&order).Error; err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Record not found!"})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, gin.H{"status": "success", "data": order})
+}
