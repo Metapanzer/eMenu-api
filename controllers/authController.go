@@ -82,7 +82,14 @@ func Login(ctx *gin.Context) {
 	if err := utils.VerifyPassword(user.Password, input.Password); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"status": "error", "message": "Invalid password"})
 		return
-
+	}
+	userResponse := models.UserResponse{
+		ID:        user.ID,
+		Email:     user.Email,
+		Name:      user.Name,
+		Role:      user.Role,
+		CreatedAt: user.CreatedAt,
+		UpdatedAt: user.UpdatedAt,
 	}
 
 	token, err := utils.GenerateToken(user.ID, user.Role)
@@ -91,7 +98,7 @@ func Login(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(http.StatusOK, gin.H{"status": "success", "message": "Account logged in", "token": token})
+	ctx.JSON(http.StatusOK, gin.H{"status": "success", "message": "Account logged in", "data": userResponse, "token": token})
 
 }
 
