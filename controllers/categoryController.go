@@ -98,3 +98,25 @@ func UpdateCategory(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, gin.H{"status": "success", "data": category})
 
 }
+
+// DeleteCategory godoc
+// @Summary Delete Item Category.
+// @Description Delete one category, This endpoint requires an admin role. The role is checked based on the user's token.
+// @Tags Category
+// @Accept       json
+// @Produce      json
+// @Param        id    path     int  true  "Category ID"
+// @Param Authorization header string true "Authorization. How to input in swagger : 'Bearer <insert_your_token_here>'"
+// @Security BearerToken
+// @Success 200 {object} []models.Category
+// @Router /category/{id} [delete]
+func DeleteCategory(ctx *gin.Context) {
+	db := ctx.MustGet("db").(*gorm.DB)
+	var catagory models.Category
+	if err := db.Where(`id = ?`, ctx.Param("id")).First(&catagory); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"status": "error", "error": "Record not found!"})
+		return
+	}
+	db.Delete(&catagory)
+	ctx.JSON(http.StatusOK, gin.H{"status": " success", "message": "Category deleted successfully"})
+}
