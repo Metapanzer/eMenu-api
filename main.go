@@ -33,12 +33,12 @@ func main() {
 	docs.SwaggerInfo.Version = "1.0"
 	docs.SwaggerInfo.Host = utils.Getenv("API_URL", "localhost:8080")
 	docs.SwaggerInfo.BasePath = "/api/v1"
-	docs.SwaggerInfo.Schemes = []string{"http", "https"}
+
 	//Connect to database
 	db := config.ConnectDataBase()
 	sqlDB, _ := db.DB()
 	defer sqlDB.Close()
 
 	route := routes.SetupRouter(db)
-	route.Run(":8080")
+	route.Run()
 }

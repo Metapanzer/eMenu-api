@@ -40,7 +40,7 @@ type UserResponse struct {
 	ID        uuid.UUID `json:"id,omitempty"`
 	Email     string    `json:"email,omitempty"`
 	Name      string    `json:"name,omitempty"`
-	Role      uint      `json:"role,omitempty"`
+	Role      string    `json:"role,omitempty"`
 	CreatedAt time.Time `json:"created_at"`
 	UpdatedAt time.Time `json:"updated_at"`
 }
