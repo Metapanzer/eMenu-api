@@ -33,6 +33,19 @@ definitions:
     required:
     - name
     type: object
+  models.ChangePasswordInput:
+    properties:
+      confirm_password:
+        type: string
+      new_password:
+        type: string
+      old_password:
+        type: string
+    required:
+    - confirm_password
+    - new_password
+    - old_password
+    type: object
   models.Item:
     properties:
       category_id:
@@ -207,6 +220,37 @@ info:
     url: http://www.apache.org/licenses/LICENSE-2.0.html
   termsOfService: http://swagger.io/terms/
 paths:
+  /account/password:
+    patch:
+      consumes:
+      - application/json
+      description: Change account password, This endpoint requires user role. The
+        role is checked based on the user's token.
+      parameters:
+      - description: the body to change account password
+        in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/models.ChangePasswordInput'
+      - description: 'Authorization. How to input in swagger : ''Bearer <insert_your_token_here>'''
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerToken: []
+      summary: Change account password.
+      tags:
+      - Auth
   /category:
     get:
       consumes:

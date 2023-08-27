@@ -44,3 +44,9 @@ type UserResponse struct {
 	CreatedAt time.Time `json:"created_at"`
 	UpdatedAt time.Time `json:"updated_at"`
 }
+
+type ChangePasswordInput struct {
+	OldPassword     string `json:"old_password" binding:"required"`
+	Password        string `json:"new_password" binding:"required,eqfield=ConfirmPassword"`
+	ConfirmPassword string `json:"confirm_password" binding:"required"`
+}

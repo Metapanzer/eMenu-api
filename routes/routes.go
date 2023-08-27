@@ -34,6 +34,8 @@ func SetupRouter(db *gorm.DB) *gin.Engine {
 		v1.GET("/item/:id/review", controllers.GetReviewByItem)
 
 		user := v1.Use(middleware.JwtAuth())
+		user.PATCH("/account/password", controllers.ChangePassword)
+
 		user.GET("/user/:id/order", controllers.GetOrderByUser)
 		user.POST("/order", controllers.InsertOrder)
 		user.PATCH("/order/:id", controllers.UpdateOrder)

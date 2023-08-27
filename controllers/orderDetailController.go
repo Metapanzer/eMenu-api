@@ -55,7 +55,7 @@ func UpdateOrderDetail(ctx *gin.Context) {
 		return
 	}
 
-	var input models.OrderUpdateInput
+	var input models.Order_detailUpdateInput
 	if err := ctx.ShouldBind(&input); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return

@@ -51,7 +51,7 @@ func Register(ctx *gin.Context) {
 	}
 
 	message := "Account created successfully"
-	ctx.JSON(http.StatusOK, gin.H{"status": "success", "message": message})
+	ctx.JSON(http.StatusCreated, gin.H{"status": "success", "message": message})
 }
 
 // Login godoc
@@ -93,4 +93,47 @@ func Login(ctx *gin.Context) {
 
 	ctx.JSON(http.StatusOK, gin.H{"status": "success", "message": "Account logged in", "token": token})
 
+}
+
+// ChangePassword godoc
+// @Summary Change account password.
+// @Description Change account password, This endpoint requires user role. The role is checked based on the user's token.
+// @Tags Auth
+// @Accept       json
+// @Produce      json
+// @Param        Body    body     models.ChangePasswordInput  true  "the body to change account password"
+// @Param Authorization header string true "Authorization. How to input in swagger : 'Bearer <insert_your_token_here>'"
+// @Security BearerToken
+// @Success 200 {object} map[string]interface{}
+// @Router /account/password [patch]
+func ChangePassword(ctx *gin.Context) {
+	db := ctx.MustGet("db").(*gorm.DB)
+	user_id, _ := ctx.Get("user_id")
+	var user models.User
+	if err := db.Where("id = ?", user_id).First(&user).Error; err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Record not found!"})
+		return
+	}
+
+	var input models.ChangePasswordInput
+	if err := ctx.ShouldBind(&input); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	if err := utils.VerifyPassword(user.Password, input.OldPassword); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"status": "error", "message": "Invalid old password"})
+		return
+
+	}
+	hashedPassword, err := utils.HashPassword(input.Password)
+	if err != nil {
+		ctx.JSON(http.StatusBadGateway, gin.H{"status": "error", "message": err.Error()})
+		return
+	}
+
+	input.Password = hashedPassword
+
+	db.Model(&user).Updates(&input)
+	message := "Password updated successfully"
+	ctx.JSON(http.StatusOK, gin.H{"status": "success", "message": message})
 }
