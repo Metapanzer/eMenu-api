@@ -252,7 +252,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "item"
+                    "Item"
                 ],
                 "summary": "Get all Item menu.",
                 "parameters": [

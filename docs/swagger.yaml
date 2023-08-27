@@ -274,7 +274,7 @@ paths:
             type: array
       summary: Get all Item menu.
       tags:
-      - item
+      - Item
     post:
       consumes:
       - application/json

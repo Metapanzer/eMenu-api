@@ -89,8 +89,8 @@ func UpdateCategory(ctx *gin.Context) {
 		return
 	}
 	var isExist models.Category
-	if err := db.Where("name =?", input.Name).First(&isExist).Error; err == nil {
-		ctx.JSON(http.StatusConflict, gin.H{"status": "error", "message": "Category already exist"})
+	if err := db.Where("name = ? AND id != ?", input.Name, ctx.Param("id")).First(&isExist).Error; err == nil {
+		ctx.JSON(http.StatusConflict, gin.H{"status": "error", "message": "Category with the same name already exists"})
 		return
 	}
 
@@ -112,7 +112,7 @@ func UpdateCategory(ctx *gin.Context) {
 func DeleteCategory(ctx *gin.Context) {
 	db := ctx.MustGet("db").(*gorm.DB)
 	var catagory models.Category
-	if err := db.Where(`id = ?`, ctx.Param("id")).First(&catagory); err != nil {
+	if err := db.Where(`id = ?`, ctx.Param("id")).First(&catagory).Error; err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"status": "error", "error": "Record not found!"})
 		return
 	}

@@ -13,7 +13,7 @@ import (
 // GetAllItem godoc
 // @Summary Get all Item menu.
 // @Description Get a list of item.
-// @Tags item
+// @Tags Item
 // @Accept       json
 // @Produce      json
 // @Param        name    query     string  false  "item search by name"
@@ -65,7 +65,7 @@ func GetItemByCategory(ctx *gin.Context) {
 	db := ctx.MustGet("db").(*gorm.DB)
 	var item []models.Item
 
-	if err := db.Where(`category_id = ?`, ctx.Param("id")).First(&item).Error; err != nil {
+	if err := db.Where(`category_id = ?`, ctx.Param("id")).Find(&item).Error; err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Record not found!"})
 		return
 	}
@@ -132,8 +132,8 @@ func UpdateItem(ctx *gin.Context) {
 		return
 	}
 	var isExist models.Item
-	if err := db.Where("name =?", input.Name).First(&isExist).Error; err == nil {
-		ctx.JSON(http.StatusConflict, gin.H{"status": "error", "message": "Item already exist"})
+	if err := db.Where("name = ? AND id != ?", input.Name, ctx.Param("id")).First(&isExist).Error; err == nil {
+		ctx.JSON(http.StatusConflict, gin.H{"status": "error", "message": "Item with the same name already exists"})
 		return
 	}
 
@@ -155,7 +155,7 @@ func UpdateItem(ctx *gin.Context) {
 func DeleteItem(ctx *gin.Context) {
 	db := ctx.MustGet("db").(*gorm.DB)
 	var item models.Item
-	if err := db.Where(`id = ?`, ctx.Param("id")).First(&item); err != nil {
+	if err := db.Where(`id = ?`, ctx.Param("id")).First(&item).Error; err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"status": "error", "error": "Record not found!"})
 		return
 	}
