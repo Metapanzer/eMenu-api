@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
 	"gorm.io/gorm"
 )
 
@@ -78,9 +79,20 @@ func UpdateReview(ctx *gin.Context) {
 // @Router /review/{id} [delete]
 func DeleteReview(ctx *gin.Context) {
 	db := ctx.MustGet("db").(*gorm.DB)
+	user_idStr, _ := ctx.Get("user_id")
+	user_id, err := uuid.Parse(user_idStr.(string))
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"status": "error", "error": "Invalid user ID"})
+		return
+	}
 	var review models.Review
 	if err := db.Where(`id = ?`, ctx.Param("id")).First(&review).Error; err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"status": "error", "error": "Record not found!"})
+		return
+	}
+
+	if review.UserID != user_id {
+		ctx.JSON(http.StatusUnauthorized, gin.H{"status": "error", "message": "Unauthorized"})
 		return
 	}
 	db.Delete(&review)

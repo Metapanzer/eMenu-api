@@ -34,6 +34,15 @@ func SetupRouter(db *gorm.DB) *gin.Engine {
 		v1.GET("/item/:id/review", controllers.GetReviewByItem)
 
 		user := v1.Use(middleware.JwtAuth())
+		// user.GET("/user/:id/order", controllers.GetOrderByUser)
+		user.POST("/order", controllers.InsertOrder)
+		user.PATCH("/order/:id", controllers.UpdateOrder)
+		user.DELETE("/order/:id", controllers.DeleteOrder)
+
+		// user.POST("/order-details", controllers.AddOrderItem)
+		// user.PATCH("/order-details/:id", controllers.UpdateOrderItem)
+		// user.DELETE("/order-details/:id", controllers.DeleteOrderItem)
+
 		user.POST("/review", controllers.InsertReview)
 		user.PATCH("/review/:id", controllers.UpdateReview)
 		user.DELETE("/review/:id", controllers.DeleteReview)
@@ -46,11 +55,6 @@ func SetupRouter(db *gorm.DB) *gin.Engine {
 		admin.PATCH("/item/:id", controllers.UpdateItem)
 		admin.DELETE("/item/:id", controllers.DeleteItem)
 
-		// route.GET("/items", controllers.GetAllMovie)
-		// route.POST("/items", controllers.CreateMovie)
-		// route.GET("/items/:id", controllers.GetMovieById)
-		// route.PATCH("/items/:id", controllers.UpdateMovie)
-		// route.DELETE("items/:id", controllers.DeleteMovie)
 	}
 
 	route.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
