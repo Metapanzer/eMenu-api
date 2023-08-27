@@ -28,11 +28,14 @@ func SetupRouter(db *gorm.DB) *gin.Engine {
 		v1.POST("/login", controllers.Login)
 
 		v1.GET("/category", controllers.GetAllCategory)
+		v1.GET("/category/:id/item", controllers.GetItemByCategory)
+
+		v1.GET("/item", controllers.GetAllItem)
 
 		admin := v1.Use(middleware.AdminOnly())
 		admin.POST("/category", controllers.InsertCategory)
-		admin.PUT("/category/:id", controllers.UpdateCategory)
-		// admin.DELETE("/category/:id", controllers.DeleteCategory)
+		admin.PATCH("/category/:id", controllers.UpdateCategory)
+		admin.DELETE("/category/:id", controllers.DeleteCategory)
 
 		// route.GET("/items", controllers.GetAllMovie)
 		// route.POST("/items", controllers.CreateMovie)

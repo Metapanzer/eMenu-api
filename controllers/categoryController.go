@@ -74,7 +74,7 @@ func InsertCategory(ctx *gin.Context) {
 // @Param Authorization header string true "Authorization. How to input in swagger : 'Bearer <insert_your_token_here>'"
 // @Security BearerToken
 // @Success 200 {object} []models.Category
-// @Router /category/{id} [put]
+// @Router /category/{id} [patch]
 func UpdateCategory(ctx *gin.Context) {
 	db := ctx.MustGet("db").(*gorm.DB)
 	var category models.Category
@@ -96,7 +96,6 @@ func UpdateCategory(ctx *gin.Context) {
 
 	db.Model(&category).Updates(&input)
 	ctx.JSON(http.StatusOK, gin.H{"status": "success", "data": category})
-
 }
 
 // DeleteCategory godoc
