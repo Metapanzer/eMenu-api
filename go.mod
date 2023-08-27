@@ -1,6 +1,6 @@
 module eMenu-api
 
-go 1.21.0
+go 1.21
 
 require (
 	github.com/KyleBanks/depth v1.2.1 // indirect
