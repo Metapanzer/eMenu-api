@@ -31,9 +31,12 @@ func SetupRouter(db *gorm.DB) *gin.Engine {
 		v1.GET("/category/:id/item", controllers.GetItemByCategory)
 
 		v1.GET("/item", controllers.GetAllItem)
+		v1.GET("/item/:id/review", controllers.GetReviewByItem)
 
 		user := v1.Use(middleware.JwtAuth())
 		user.POST("/review", controllers.InsertReview)
+		user.PATCH("/review/:id", controllers.UpdateReview)
+		user.DELETE("/review/:id", controllers.DeleteReview)
 
 		admin := v1.Use(middleware.AdminOnly())
 		admin.POST("/category", controllers.InsertCategory)
