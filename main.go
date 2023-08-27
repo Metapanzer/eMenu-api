@@ -33,7 +33,6 @@ func main() {
 	docs.SwaggerInfo.Version = "1.0"
 	docs.SwaggerInfo.Host = utils.Getenv("API_URL", "fp-sanbercode-go-48-krisna-production.up.railway.app")
 	docs.SwaggerInfo.BasePath = "/api/v1"
-	docs.SwaggerInfo.Schemes = []string{"http", "https"}
 
 	//Connect to database
 	db := config.ConnectDataBase()
