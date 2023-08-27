@@ -11,11 +11,11 @@ import (
 
 func ConnectDataBase() *gorm.DB {
 
-	username := utils.Getenv("DB_USERNAME", "root")
-	password := utils.Getenv("DB_PASSWORD", "1234")
-	host := utils.Getenv("DB_HOST", "127.0.0.1")
-	port := utils.Getenv("DB_PORT", "3306")
-	database := utils.Getenv("DB_NAME", "db_emenu")
+	username := utils.Getenv("MYSQLUSER", "root")
+	password := utils.Getenv("MYSQLPASSWORD", "1234")
+	host := utils.Getenv("MYSQLHOST", "127.0.0.1")
+	port := utils.Getenv("MYSQLPORT", "3306")
+	database := utils.Getenv("MYSQLDATABASE", "db_emenu")
 
 	dsn := fmt.Sprintf("%v:%v@tcp(%v:%v)/%v?charset=utf8mb4&parseTime=True&loc=Local", username, password, host, port, database)
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
