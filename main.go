@@ -39,5 +39,5 @@ func main() {
 	defer sqlDB.Close()
 
 	route := routes.SetupRouter(db)
-	route.Run(":8080")
+	route.Run()
 }
