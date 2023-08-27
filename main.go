@@ -31,9 +31,8 @@ func main() {
 	docs.SwaggerInfo.Title = "eMenu API"
 	docs.SwaggerInfo.Description = "This is a sample of eMenu API."
 	docs.SwaggerInfo.Version = "1.0"
-	docs.SwaggerInfo.Host = utils.Getenv("API_URL", "localhost:8080")
 	docs.SwaggerInfo.BasePath = "/api/v1"
-	docs.SwaggerInfo.Schemes = []string{"http", "https"}
+
 	//Connect to database
 	db := config.ConnectDataBase()
 	sqlDB, _ := db.DB()
