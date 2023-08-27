@@ -2,7 +2,6 @@ package utils
 
 import (
 	"fmt"
-	"os"
 	"strconv"
 	"strings"
 	"time"
@@ -11,11 +10,11 @@ import (
 	"github.com/golang-jwt/jwt"
 )
 
-var TOKEN_SECRET = os.Getenv("TOKEN_SECRET")
+var TOKEN_SECRET = Getenv("TOKEN_SECRET", "JWT-nuclear-code")
 
 // Function to generate JWT Token
 func GenerateToken(user_id interface{}, role string) (string, error) {
-	token_expired_in, err := strconv.Atoi(os.Getenv("TOKEN_EXPIRED_IN"))
+	token_expired_in, err := strconv.Atoi(Getenv("TOKEN_EXPIRED_IN", "60"))
 
 	if err != nil {
 		return "", err

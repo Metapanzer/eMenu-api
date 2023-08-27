@@ -4,8 +4,8 @@ import (
 	"eMenu-api/config"
 	"eMenu-api/docs"
 	"eMenu-api/routes"
+	"eMenu-api/utils"
 	"log"
-	"os"
 
 	"github.com/joho/godotenv"
 )
@@ -17,15 +17,21 @@ import (
 // @license.url http://www.apache.org/licenses/LICENSE-2.0.html
 // @termsOfService http://swagger.io/terms/
 func main() {
-	err := godotenv.Load()
-	if err != nil {
-		log.Fatal("Error loading .env file")
+	// for load godotenv
+	// for env
+	environment := utils.Getenv("ENVIRONMENT", "development")
+
+	if environment == "development" {
+		err := godotenv.Load()
+		if err != nil {
+			log.Fatal("Error loading .env file")
+		}
 	}
 	//Programmatically set swagger info
 	docs.SwaggerInfo.Title = "eMenu API"
 	docs.SwaggerInfo.Description = "This is a sample of eMenu API."
 	docs.SwaggerInfo.Version = "1.0"
-	docs.SwaggerInfo.Host = os.Getenv("API_URL")
+	docs.SwaggerInfo.Host = utils.Getenv("API_URL", "localhost:8080")
 	docs.SwaggerInfo.BasePath = "/api/v1"
 	docs.SwaggerInfo.Schemes = []string{"http", "https"}
 	//Connect to database

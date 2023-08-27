@@ -2,28 +2,22 @@ package config
 
 import (
 	"eMenu-api/models"
+	"eMenu-api/utils"
 	"fmt"
-	"github.com/joho/godotenv"
+
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
-	"log"
-	"os"
 )
 
 func ConnectDataBase() *gorm.DB {
 
-	err := godotenv.Load()
-	if err != nil {
-		log.Fatal("Error loading .env file")
-	}
+	username := utils.Getenv("DB_USERNAME", "root")
+	password := utils.Getenv("DB_PASSWORD", "1234")
+	host := utils.Getenv("DB_HOST", "127.0.0.1")
+	port := utils.Getenv("DB_PORT", "3306")
+	database := utils.Getenv("DB_NAME", "db_emenu")
 
-	username := os.Getenv("DB_USERNAME")
-	password := os.Getenv("DB_PASSWORD")
-	host := os.Getenv("DB_HOST")
-	database := os.Getenv("DB_NAME")
-
-	dsn := fmt.Sprintf("%v:%v@%v/%v?charset=utf8mb4&parseTime=True&loc=Local", username, password, host, database)
-
+	dsn := fmt.Sprintf("%v:%v@tcp(%v:%v)/%v?charset=utf8mb4&parseTime=True&loc=Local", username, password, host, port, database)
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 
 	if err != nil {
