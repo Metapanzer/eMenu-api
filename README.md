@@ -1,5 +1,4 @@
-# FP-Sanbercode-Go-48-KrisnaSandyPribadi
-Final project Go backend for Sanbercode course
+# eMenu-API
 
 Demo:
 User Account
