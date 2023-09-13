@@ -5,9 +5,6 @@ import (
 	"eMenu-api/docs"
 	"eMenu-api/routes"
 	"eMenu-api/utils"
-	"log"
-
-	"github.com/joho/godotenv"
 )
 
 // @contact.name API Support
@@ -19,14 +16,8 @@ import (
 func main() {
 	// for load godotenv
 	// for env
-	environment := utils.Getenv("ENVIRONMENT", "development")
+	utils.LoadEnv(".env.production")
 
-	if environment == "development" {
-		err := godotenv.Load()
-		if err != nil {
-			log.Fatal("Error loading .env file")
-		}
-	}
 	//Programmatically set swagger info
 	docs.SwaggerInfo.Title = "eMenu API"
 	docs.SwaggerInfo.Description = "This is a sample of eMenu API."
