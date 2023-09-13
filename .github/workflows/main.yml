@@ -1,4 +1,4 @@
-name: Deploy website on push
+name: Deploy to cPanel on push
 
 # Controls when the workflow will run
 on: 
@@ -26,7 +26,7 @@ jobs:
     - name: Sync files
       uses: SamKirkland/FTP-Deploy-Action@4.1.0
       with:
-        server: ftp.sandypribadi.my.id
-        username: ${{ secrets.USERNAME }}
-        password: ${{ secrets.PASSWORD }}
+        server: ${{ secrets.FTP_SERVER }}
+        username: ${{ secrets.FTP_USERNAME }}
+        password: ${{ secrets.FTP_PASSWORD }}
         server-dir: /
